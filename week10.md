@@ -4,7 +4,7 @@ The operator runs a single bash script once. It's an infinite `while true` loop.
 
 ## What commands ran before Claude started?
 
-Three things happen in the shell before Claude is invoked: the current git commit hash is captured, a per-session log file path is constructed from that hash, and a fresh Docker container is made with the upstream bare git repo mounted inside it. Only then does `claude --dangerously-skip-permissions -p "$(cat AGENT_PROMPT.md)"` run.
+Three things happen in the shell before Claude is started: the current git commit hash is captured, a per-session log file path is constructed from that hash, and a fresh Docker container is made with the upstream bare git repo mounted inside it. Only then does the command `claude --dangerously-skip-permissions -p "$(cat AGENT_PROMPT.md)"` run.
 
 ## How did each VM interact with the system, and what was in it?
 
@@ -12,4 +12,4 @@ Each VM held the bare upstream git repo at `/upstream` and Claude's local workin
 
 ## What did Claude do besides write code?
 
-From what I understand, there is a bit of coordination work. Reading and updating READMEs and progress files to orient itself in each fresh container, choosing which task to tackle next, maintaining a running doc of failed approaches when stuck on a bug, managing the git locking/merging protocol to avoid stomping on other agents, and resolving merge conflicts. In one session, it also accidentally ran `pkill -9 bash` — killing itself and ending that loop iteration early.
+From what I understand, there is a bit of coordination work. Reading and updating READMEs and progress files to orient itself in each fresh container, choosing which task to tackle next, maintaining a running doc of failed approaches when stuck on a bug, managing the git locking/merging protocol to avoid stomping on other agents, and resolving merge conflicts. In one session, it also accidentally ran `pkill -9 bash` which killed itself and ending that loop iteration early.
