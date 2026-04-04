@@ -1,0 +1,24 @@
+My features were not well divided into classes and there was a lot of overlap. Even with refactoring and code improvements.
+       
+  ---                                                                         
+  1. Extract the theme/color scheme into its own module
+                                                       
+  Right now the dark theme is a hardcoded COLORS dict inside EditorWidget, and StatusBarWidget in main_window.py has more      
+  hardcoded hex values scattered inline in setStyleSheet calls. These are the same design decision — the visual theme — spread across two unrelated classes.
+                                                                              
+  A
+  single Theme module with a well-defined interface would mean that if you ever change the palette, you change
+  one file instead of hunting across the codebase. Currently, neither EditorWidget nor StatusBarWidget should know 
+  what the colors are — they should just ask the theme.
+
+  ---
+  2. Separate the find/replace search engine from the editor widget
+                                                                                
+  EditorWidget currently does two distinct jobs: it renders text and manages the find/replace search state. The regex algorithm, 
+  the match list, and navigation index are all hidden inside a display widget. 
+
+  Parnas's point is that the search algorithm is a design decision — one that I've 
+  already changed once. A SearchEngine module that owns the match state and exposes a 
+  clean interface would hide that decision. EditorWidget would only need to call it and apply the resulting
+  selections — it wouldn't need to know how the matches were found. This also takes the search logic independently testable without instantiating a Qt
+  widget.
